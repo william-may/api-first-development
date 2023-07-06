@@ -1,0 +1,47 @@
+openapi: 3.0.1
+info:
+  title: API Driven Development Demo
+  version: 1.0.0
+  description: "Tutorial for api first development"
+
+servers:
+  - url: /api
+    description: base url for dev environment
+
+tags:
+  - name: post
+    description: Operations about post
+
+paths:
+  /v1/posts:
+    get:
+      tags:
+        - post
+      summary: Get All Posts
+      operationId: getAllPosts
+      responses:
+        200:
+          description: Successful operation and get all posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        author_name:
+                          type: string
+
+
+
+
+
