@@ -30,17 +30,189 @@ paths:
                   posts:
                     type: array
                     items:
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        author_name:
-                          type: string
+                      $ref: '#/components/schemas/Post'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        -post
+      summary: create new post
+      operationId: createPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddPostRequestBody'
+      responses:
+        201:
+          description: Resource created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddPostResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
+  /v1/posts/{postId}:
+    get:
+      tags:
+        - post
+      summary: get post by post id
+      operationId: getPostById
+      parameters:
+        - $ref: '#/components/parameters/PostIdPathVariable'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        404:
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - post
+      summary: Delete post by id
+      operationId: deleteByPostId
+      parameters:
+        - $ref: '#/components/parameters/PostIdPathVariable'
+      responses:
+        204:
+          description: Resource successfully deleted
+        404:
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - post
+      summary: Update post
+      operationId: updatePostById
+      parameters:
+        - $ref: '#/components/parameters/PostIdPathVariable'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePostRequestBody'
+      responses:
+        204:
+          description: Resource Updated
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Resource Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+
+components:
+  parameters:
+    PostIdPathVariable:
+      - name: postId
+        in: path
+        description: postId of post that will be deleted
+        required: true
+        schema:
+          type: string
+          format: uuid
+  schemas:
+    AddPostResponse:
+      type: object
+      required:
+        -userId
+      properties:
+        userId:
+          type: string
+          format: uuid
+
+    UpdatePostRequestBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+
+    AddPostRequestBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        author_name:
+          type: string
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        author_name:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
 
 
 
